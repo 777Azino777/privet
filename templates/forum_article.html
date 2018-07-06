@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container">
+
+<h1>{{article.article_title}}</h1>
+<h3>{{article.article_text}}</h3>
+{% for com in page_number reversed%}
+<p></p>
+
+Дата комента: {{com.comments_date}}
+    <div class=" container card">
+
+    <div class="row">
+        <div class=" col-md-2" >Пользователь:<h3>{{com.comments_from}}</h3></div>
+        <div class="col-md-10">Коментарий:<h4 class="">{{com.comments_text}}</h4>
+        </div>
+
+    </div>
+
+
+</div >
+<div class="container">
+    <hr>
+</div>
+
+
+{%endfor%}
+
+
+
+
+
+    <ul class="pagination">
+                        {% if page_number.has_previous %}
+                        <li class="page-item"><a class="page-link" href="/forum/forum_article/{{article_number}}/{{ page_number.previous_page_number }}/">&laquo;</a></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link" href="">&laquo;</a></li>
+                        {% endif %}
+
+                        {% for page in page_number.paginator.page_range %}
+
+                            {% if page == page_number.number %}
+                                <li class="page-item"><a class="page-link" href="/forum/forum_article/{{article_number}}/{{ page }}/">{{ page }}</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="/forum/forum_article/{{article_number}}/{{ page }}/">{{ page }}</a></li>
+                            {% endif %}
+
+                        {% endfor %}
+
+                        {% if page_number.has_next %}
+                            <li class="page-item"><a class="page-link" href="/forum/forum_article/{{ page_number.next_page_number }}/">&raquo;</a></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="">&raquo;</a></li>
+                        {% endif %}
+                    </ul>
+
+
+
+
+
+</div>
+{% if username %}
+<div class="container" >
+    <form action="/forum/forum_article/addcomment/{{ article.id }}" method="post">
+         {% csrf_token %}
+        {{ form }}
+        <input type="submit" class="button" value="Добавть коммент">
+    </form>
+
+</div>
+{% endif %}
+{% endblock %}
